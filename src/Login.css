@@ -1,0 +1,24 @@
+a{
+	display: inline-block;
+	text-decoration: none;
+	color: white;
+	border: 1px solid white;
+	border-radius: 8px;
+	padding: 12px 40px;
+	font-size: 28px;
+	background: transparent;
+	position: relative;
+	cursor: pointer;
+	animation: fadeInAnimation ease 3s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+}
+
+a:hover{
+	border: 1px solid #1DB954;
+	background:#1DB954;
+	transition: 0.3s;
+	text-decoration: none;
+	color:white;
+	
+}
