@@ -1,16 +1,28 @@
-import Song from './Track';
+import { useState, useEffect } from "react"
+import axios from "axios"
+import Track from './Track';
 
+export default function TracksQueue(queueId){
+const [tracks, setTracks] = useState()
 
-const TracksQueue = ({tracks}) =>{
+useEffect(() =>{
+    axios.get("http://localhost:3001/"+queueId+"/songs")
+.then(res =>{
+    setTracks(res.data)
+});
+})
+
+//{tracks.map((track) => (
+//    <Track 
+//    track ={track.uri} 
+//    />
+//))}
+
+return TracksQueue = () =>{
     return(
     <div className="tracks-queue">
-        {tracks.map((track) => (
-            <Song 
-            track ={track.uri} 
-            />
-        ))}
+        <div className="dashboard">{tracks ? tracks : null}</div>
     </div>
     )
 }
-
-export default TracksQueue;
+}

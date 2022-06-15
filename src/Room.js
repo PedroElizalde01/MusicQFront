@@ -4,7 +4,7 @@ import Player from "./Player"
 import TrackSearchResult from "./TrackSearchResult"
 import { Container, Form } from "react-bootstrap"
 import SpotifyWebApi from "spotify-web-api-node"
-import Queue from "./TracksQueue"
+import TracksQueue from "./TracksQueue"
 import axios from "axios"
 
 const spotifyApi = new SpotifyWebApi({
@@ -13,12 +13,15 @@ const spotifyApi = new SpotifyWebApi({
 
 export default function Dashboard({ code }) {
   const accessToken = useAuth(code)
+  //const position = useState(0)
   const [search, setSearch] = useState("")
   const [searchResults, setSearchResults] = useState([])
   const [playingTrack, setPlayingTrack] = useState()
-  const [queue, setQueue] = useState([]);
+  const queueId = "cl4f3x7g5000760bn21ioj4os";
+  
 
   function chooseTrack(track) {
+//save in database
     setPlayingTrack(track)
     setSearch("")
   }
@@ -58,6 +61,7 @@ export default function Dashboard({ code }) {
     return () => (cancel = true)
   }, [search, accessToken])
 
+
   return (
     <Container className="d-flex flex-column py-2" style={{ height: "100vh" }}>
       <Form.Control
@@ -74,9 +78,10 @@ export default function Dashboard({ code }) {
             chooseTrack={chooseTrack}
           />
         ))}
+        <h1 style={{color:"white"}}>NEXT UP</h1>
         {searchResults.length === 0 && (
           <div className="text-center" style={{ whiteSpace: "pre" }}>
-            {queue}
+            <TracksQueue queueId={queueId} />
           </div>
         )}
       </div>

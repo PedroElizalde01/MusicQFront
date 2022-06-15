@@ -5,6 +5,7 @@ export default function useAuth(code) {
   const [accessToken, setAccessToken] = useState()
   const [refreshToken, setRefreshToken] = useState()
   const [expiresIn, setExpiresIn] = useState()
+  const [user, setUser] = useState()
 
   useEffect(() => {
     axios
@@ -15,12 +16,13 @@ export default function useAuth(code) {
         setAccessToken(res.data.accessToken)
         setRefreshToken(res.data.refreshToken)
         setExpiresIn(res.data.expiresIn)
+        setUser(res.data.user)
         window.history.pushState({}, null, "/")
       })
       .catch(() => {
         
       })
-  }, [code])
+  }, [code,user])
 
   useEffect(() => {
     if (!refreshToken || !expiresIn) return
