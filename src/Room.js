@@ -8,20 +8,28 @@ import TracksQueue from "./TracksQueue"
 import axios from "axios"
 
 const spotifyApi = new SpotifyWebApi({
-  clientId: "8b945ef10ea24755b83ac50cede405a0",
+  clientId: "b3f26e3f562d4f57a30c6b5af6b6bbc4",
 })
 
-export default function Dashboard({ code }) {
-  const accessToken = useAuth(code)
-  //const position = useState(0)
+export default function Room({ code }) {
+  const [accessToken, queueId] = useAuth(code)
   const [search, setSearch] = useState("")
   const [searchResults, setSearchResults] = useState([])
   const [playingTrack, setPlayingTrack] = useState()
-  const queueId = "cl4f3x7g5000760bn21ioj4os";
+  const queueId3 = "cl4im6ev6000898bnjmp71sc6"
+
   
 
   function chooseTrack(track) {
-//save in database
+    console.log(queueId)
+      axios.post("http://localhost:3001/addSong",{
+        uri:track.uri,
+        queueId: "queueId",
+        likes: 0,
+        dislikes: 0
+      },[track])
+      .then(() => console.log("SONG ENQUEUED SUCCESSFULLY"))
+      .catch(() => console.log("ERROR ENQUEUEING SONG"))
     setPlayingTrack(track)
     setSearch("")
   }
@@ -78,7 +86,7 @@ export default function Dashboard({ code }) {
             chooseTrack={chooseTrack}
           />
         ))}
-        <h1 style={{color:"white"}}>NEXT UP</h1>
+        <h1 style={{color:"white"}}>Next Up</h1>
         {searchResults.length === 0 && (
           <div className="text-center" style={{ whiteSpace: "pre" }}>
             <TracksQueue queueId={queueId} />
