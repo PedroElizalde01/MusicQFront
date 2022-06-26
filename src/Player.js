@@ -20,7 +20,8 @@ export default function Player({ accessToken, trackUri }) {
         trackNameColor:"white",
         sliderColor:"rgba(30, 215, 96, 1)",
         sliderHandleColor:"rgba(30, 215, 96, 1)",
-        color:"white"
+        color:"white",
+        bgColor:"rgba(25, 20, 20, 1)"
     }}
     />
   )

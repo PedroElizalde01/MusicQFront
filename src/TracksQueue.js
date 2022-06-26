@@ -2,39 +2,31 @@ import { useState, useEffect } from "react"
 import axios from "axios"
 import Track from './Track';
 
-export default function TracksQueue(queueId){
+export default function TracksQueue(queueId, {spotifyApi}){
 const [tracks, setTracks] = useState([])
-const [queue, setQueue] = useState()
 
-console.log()
+useEffect(() =>{ 
+    axios.get("http://localhost:3001/"+queueId.queueId+"/songs")
+    .then(function(res){
+        setTracks(res.data)
+        //res.data.map((song) => {return setTracks(tracks.push(song))})
+    })
+},[])
 
-//useEffect(() =>{
-//    axios.get("http://localhost:3001/queueId/cl4f3x7g5000760bn21ioj4os")
-//    .then(res =>{
-//        setQueue(res.data.id)
-//        console.log(res.data.id)
-//    })
-//},setQueue)
+console.log(tracks)
 
-//useEffect(() =>{
-//    axios.get("http://localhost:3001/cl4f3x7g5000760bn21ioj4os/songs")
-//.then(res =>{
-//    console.log(res.data)
-//    setTracks(res.data)
-//});
-//},[tracks, setTracks])
-
-//{tracks.map((track) => (
-//    <Track 
-//    track ={track.uri} 
-//    />
-//))}
-
-return TracksQueue = () =>{
     return(
     <div className="tracks-queue">
-        <div className="dashboard" style={{color:"white"}}>Queue Id: {queueId.queueId}</div>
+        <div className="dashboard" style={{color:"white"}}> Queue Id: {queueId.queueId}</div> 
+        <div>
+            {tracks.length > 0 ?
+                tracks.map((track) =>
+                <Track track={track} key={track.uri} title={"test"}/>
+                ):
+                <h2 style={{color:"grey"}}>Search and add a song</h2> // add spinner -Pedro
+            }
+            
+        </div>
     </div>
     )
-}
 }

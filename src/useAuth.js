@@ -5,7 +5,6 @@ export default function useAuth(code) {
   const [accessToken, setAccessToken] = useState()
   const [refreshToken, setRefreshToken] = useState()
   const [expiresIn, setExpiresIn] = useState()
-  const [user, setUser] = useState()
   const [queueId, setQueueId] = useState()
 
   useEffect(() => {
@@ -14,11 +13,11 @@ export default function useAuth(code) {
         code,
       })
       .then(res => {
-        setAccessToken(res.data.accessToken)
-        setRefreshToken(res.data.refreshToken)
-        setExpiresIn(res.data.expiresIn)
-        setQueueId(res.data.id)
-        window.history.pushState({}, null, "/")
+        setAccessToken(res.data[0].accessToken)
+        setRefreshToken(res.data[0].refreshToken)
+        setExpiresIn(res.data[0].expiresIn)
+        setQueueId(res.data[1].id)
+        window.history.pushState({}, null, "/queue="+res.data[1].id)
       })
       .catch(() => {
         
@@ -44,5 +43,5 @@ export default function useAuth(code) {
     return () => clearInterval(interval)
   }, [refreshToken, expiresIn])
 
-  return [accessToken,queueId]
+  return [accessToken, queueId]
 }

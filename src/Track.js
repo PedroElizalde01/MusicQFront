@@ -1,7 +1,7 @@
 import React from "react"
 
 
-const Track = ({track}) => {
+const Track = ({track,title}) => {
   return (
     <div className="d-flex m-2 align-items-center">
       <img src={track.albumUrl} style={{ height: "64px", width: "64px" }} alt="" />
@@ -9,6 +9,7 @@ const Track = ({track}) => {
         <div style={{ color: "white" }}>{track.title}</div>
         <div className="text-muted">{track.artist}</div>
         <div className="text-muted">{track.uri}</div>
+        <div style={{ color: "green" }}>{title}</div>
       </div>
     </div>
   );
