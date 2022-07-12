@@ -2,15 +2,16 @@ import React from "react"
 import Track from "./Track"
 
 export default function TrackSearchResult({ track, chooseTrack }) {
+  
   function handlePlay() {
     chooseTrack(track)
   }
 
   return (
     <div
-      style={{ cursor: "pointer" }}
+      style={{ cursor: "pointer"}}
       onClick={handlePlay}>
-      <Track track={track}/>
+      <Track track={track} search={true} dj={false}/>
     </div>
   )
 }

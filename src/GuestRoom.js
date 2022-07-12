@@ -1,26 +1,23 @@
 import { useState, useEffect } from "react"
-import useAuth from "./useAuth"
-import Player from "./Player"
 import TrackSearchResult from "./TrackSearchResult"
 import { Container, Form } from "react-bootstrap"
 import SpotifyWebApi from "spotify-web-api-node"
 import TracksQueue from "./TracksQueue"
 import axios from "axios"
 import Modal from 'react-modal';
-import './Room.css'
 import { QRCodeSVG } from 'qrcode.react';
-import { Link } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, Link, useParams} from 'react-router-dom';
 
 const spotifyApi = new SpotifyWebApi({
-  clientId: "b3f26e3f562d4f57a30c6b5af6b6bbc4",
+  clientId: process.env.CLIENT_ID,
+  clientSecret: process.env.CLIENT_SECRET
 })
 
-export default function Room( {code} ) {
-  const [accessToken, queueId] = useAuth(code)
+export default function GuestRoom() {
+  let {queueId} = useParams()
+  const [accessToken,setAccessToken] = useState()
   const [search, setSearch] = useState("")
   const [searchResults, setSearchResults] = useState([])
-  const [playingTrack, setPlayingTrack] = useState()
-  const [position, setPosition] = useState(0)
   const [tracks, setTracks] = useState([])
   const [modal, setModal] = useState(false)
   const link = "http://localhost:3000/join/"+queueId
@@ -33,48 +30,40 @@ export default function Room( {code} ) {
   function closeModal(){
     setModal(false)
   }
-
-  useEffect(() =>{ 
-    axios.get("http://localhost:3001/"+queueId+"/songs") // websocket? -Pedro
-    .then(function(res){
-      setInterval(setTracks(res.data),5000)
-    })
-})
-
-  useEffect(() => {
-    axios.get("http://localhost:3001/"+queueId+"/lastSong")
-    .then((res) => {
-      const oldPosition = res.data.position
-      if(oldPosition == NaN) setPosition(0);
-      setPosition(oldPosition+1)
-    },[])
-  })
-
-
+  
+//saves song in certain queue
   function chooseTrack(track) {
     //add condition if queue is empty -Pedro 
-    console.log(position)
       axios.post("http://localhost:3001/addSong",{
         uri: track.uri,
         title: track.title,
         artist: track.artist,
         albumUrl: track.albumUrl,
         queueId: queueId,
-        position: position,
         likes: 0,
         dislikes: 0
       })
       .then(() => console.log("SONG ENQUEUED SUCCESSFULLY"))
       .catch(() => console.log("ERROR"))
-      tracks.push(track)
-    setPlayingTrack(track)
     setSearch("")
   }
 
+  //get all songs from certain queue
+  useEffect(() =>{ 
+    axios.get("http://localhost:3001/"+queueId+"/songs") 
+    .then(function(res){
+      setInterval(setTracks(res.data),5000)
+    })
+})
+
+//save guest info in database
   useEffect(() => {
-    if (!accessToken) return
-    spotifyApi.setAccessToken(accessToken)
-  }, [accessToken, queueId])
+    axios.post("http://localhost:3001/queue="+queueId)
+    .then((res) =>{
+      setAccessToken(res.data.accessToken)
+      spotifyApi.setAccessToken(res.data.accessToken)
+    })
+  },[])
 
   useEffect(() => {
     if (!search) return setSearchResults([])
@@ -100,8 +89,9 @@ export default function Room( {code} ) {
 
   return (
     <Container className="d-flex flex-column py-2" style={{ height: "100vh", backgroundColor:"rgba(25, 20, 20, 1)"}}>
+
       <div>
-        <Link to="/" className="button" style={{borderRadius:"50%", float:"left", textAlign:"center"}}> ◀ </Link>
+        <Link to="/" style={{borderRadius:"50%", float:"left", textAlign:"center"}}> ◀ </Link>
         <button className="button" style={{borderRadius:"50%", float:"right", textAlign:"center"}} onClick={openModal}> i </button>
       </div>
       <Modal
@@ -119,13 +109,14 @@ export default function Room( {code} ) {
             <QRCodeSVG className="qrCode" value={link}/>
           </div>
         </Modal>
+
       <Form.Control
         type="search"
-        placeholder="Search Songs"
+        placeholder="Search Songs/Artists"
         value={search}
         onChange={e => setSearch(e.target.value)}
       />
-      <div className="flex-grow-1 my-2" style={{ overflowY: "auto", textAlign: "left" }}>
+      <div className="flex-grow-1 my-2" style={{ overflowY: "auto", textAlign: "left"}}>
         {searchResults.map(track => (
           <TrackSearchResult
             track={track}
@@ -136,12 +127,11 @@ export default function Room( {code} ) {
         <h1 style={{color:"white"}}>Next Up</h1>
         {searchResults.length === 0 && (
           <div className="text-center" style={{ whiteSpace: "pre" }}>
-            <TracksQueue tracks={tracks} search={false} dj={true}/>
+            <TracksQueue tracks={tracks} search={false} dj={false}/>
           </div>
         )}
       </div>
       <div>
-        <Player accessToken={accessToken} trackUri={tracks.map(track => (track.uri))} />
       </div>
     </Container>
   )

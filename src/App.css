@@ -1,0 +1,52 @@
+.queueId{
+    color:white;
+    border: none;
+    background-color:transparent;
+    border-bottom: 2px solid white;
+    width:500px;
+    height:50px;
+    font-size: 28px;
+    text-align:center;
+}
+
+.queueId:focus{
+    outline: none;
+    background-color:transparent;
+    border-bottom: 2px solid #1DB954;
+    width:500px;
+    height:50px;
+    font-size: 28px;
+    text-align:center;
+}
+
+.wrapper{
+    height:100vh;
+    display:table-cell;
+    vertical-align:middle;
+    width: 1%;
+    margin: 0 auto;
+    background-color: #191414;
+}
+
+button#main{
+	display: inline-block;
+	text-decoration: none;
+	color: white;
+	border: 1px solid white;
+	border-radius: 8px;
+	padding: 12px 40px;
+	font-size: 28px;
+	background: transparent;
+	position: relative;
+	cursor: pointer;
+	margin: 15px;
+}
+
+button#main:hover{
+	border: 1px solid #1DB954;
+	background:#1DB954;
+	transition: 0.3s;
+	text-decoration: none;
+	color:white;
+	
+}

@@ -1,0 +1,52 @@
+.button {
+	text-decoration: none;
+    text-align: center;
+	color: white;
+	border: 1px solid white;
+	border-radius: 8px;
+	padding: 12px 40px;
+	font-size: 28px;
+	background: transparent;
+	position: relative;
+	cursor: pointer;
+	margin: 15px;
+}
+
+.button:hover{
+	border: 1px solid #1DB954;
+	background:#1DB954;
+	transition: 0.3s;
+	text-decoration: none;
+	color:white;
+	
+}
+
+.Modal {
+    position: absolute;
+    top: 200px;
+    left: 200px;
+    right: 200px;
+    bottom: 200px;
+    padding: 40px;
+    background-color: #302929;
+    border-radius: 12px;
+    min-width: 790px;
+    min-height:550;
+  }
+
+  .Overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #1914147e;
+  }
+
+  .qrCode{
+    background:white;
+    padding: 2px;
+    width: 380px;
+    height:380px
+    
+  }

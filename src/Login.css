@@ -13,9 +13,7 @@ a{
 	background: transparent;
 	position: relative;
 	cursor: pointer;
-	animation: fadeInAnimation ease 3s;
-    animation-iteration-count: 1;
-    animation-fill-mode: forwards;
+	margin: 15px;
 }
 
 a:hover{

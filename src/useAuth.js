@@ -17,7 +17,7 @@ export default function useAuth(code) {
         setRefreshToken(res.data[0].refreshToken)
         setExpiresIn(res.data[0].expiresIn)
         setQueueId(res.data[1].id)
-        window.history.pushState({}, null, "/queue="+res.data[1].id)
+        window.history.pushState({}, null,"/create")
       })
       .catch(() => {
         
