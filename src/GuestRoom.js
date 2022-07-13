@@ -7,6 +7,7 @@ import axios from "axios"
 import Modal from 'react-modal';
 import { QRCodeSVG } from 'qrcode.react';
 import { BrowserRouter, Route, Routes, Link, useParams} from 'react-router-dom';
+import './Room.css'
 
 const spotifyApi = new SpotifyWebApi({
   clientId: process.env.CLIENT_ID,
@@ -20,6 +21,7 @@ export default function GuestRoom() {
   const [searchResults, setSearchResults] = useState([])
   const [tracks, setTracks] = useState([])
   const [modal, setModal] = useState(false)
+  const [position, setPosition] = useState(1)
   const link = "http://localhost:3000/join/"+queueId
   
 
@@ -30,6 +32,17 @@ export default function GuestRoom() {
   function closeModal(){
     setModal(false)
   }
+
+  useEffect( () => {
+    axios.get("http://localhost:3001/"+queueId+"/lastSong")
+    .then((res) => {
+      const n = res.data.position
+      console.log("oldPosition: " + n)
+      if(n != undefined) setPosition(n + 1);
+      console.log("position: " + position)
+      
+    })
+  },[search])
   
 //saves song in certain queue
   function chooseTrack(track) {
@@ -40,6 +53,7 @@ export default function GuestRoom() {
         artist: track.artist,
         albumUrl: track.albumUrl,
         queueId: queueId,
+        position: position,
         likes: 0,
         dislikes: 0
       })
@@ -91,7 +105,7 @@ export default function GuestRoom() {
     <Container className="d-flex flex-column py-2" style={{ height: "100vh", backgroundColor:"rgba(25, 20, 20, 1)"}}>
 
       <div>
-        <Link to="/" style={{borderRadius:"50%", float:"left", textAlign:"center"}}> ◀ </Link>
+      <a href="http://localhost:3000" className="button" style={{borderRadius:"50%", float:"left", textAlign:"center"}}> ◀ </a>
         <button className="button" style={{borderRadius:"50%", float:"right", textAlign:"center"}} onClick={openModal}> i </button>
       </div>
       <Modal
@@ -107,6 +121,17 @@ export default function GuestRoom() {
             </div>
             <div className="d-flex">
             <QRCodeSVG className="qrCode" value={link}/>
+            <form>
+            <input type="radio" id="ratio" name="fav_language" value="HTML"/>
+            <label id="ratio">Disable</label>
+            <br/>
+            <input type="radio" id="ratio" name="fav_language" value="CSS"/>
+            <label id="ratio">Most Liked</label>
+            <br/>
+            <input type="radio" id="ratio" name="fav_language" value="JavaScript"/>
+            <label id="ratio">Most Disliked</label>
+            <br/>
+          </form> 
           </div>
         </Modal>
 

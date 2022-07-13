@@ -22,14 +22,28 @@ function App() {
     </div>
   )
  function Home() {
+
     const navigate = useNavigate();
+    
    function handleJoin() {
       const queueId = document.getElementById('queueId').value;
       axios.get("http://localhost:3001/queueId/"+queueId)
-      .then(() => navigate('/join/'+queueId))
-      .catch(() =>alert("Please enter a valid queueId"))      
+      .then((res) => {
+        if(res.data === null) {
+          alert("Please enter a valid queueId")
+          return
+      }
+      navigate('/join/'+queueId)
+    })
+      .catch(() =>alert("Please enter a valid queueId"))
     };
+
+
    return <div>
+    <div style={{marginBottom:"100px"}}>
+    <h1 id="title"> Music Queue</h1>
+    <h2 id="description"> Share your queue and listen to music together </h2>
+    </div>
       <Link id="main" to="/create">CREATE</Link>
       <br/>
         <button id="main" onClick={handleJoin}>JOIN</button>

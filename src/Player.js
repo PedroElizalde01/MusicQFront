@@ -17,15 +17,16 @@ export default function Player({ accessToken, trackUri }) {
   if (!accessToken) return null
   return (
     <div>
-      <button type="button" onClick={handlePlay}>add song</button>
     <SpotifyPlayer
+    name={"MusicQ Player"}
       token={accessToken}
       showSaveIcon
       callback={state => {
         if (!state.isPlaying) setPlay(false)
+        console.log(state.progressMs)
       }}
       play={true}
-      uris={tracks}
+      uris={trackUri}
       styles={{
         trackNameColor:"white",
         sliderColor:"rgba(30, 215, 96, 1)",

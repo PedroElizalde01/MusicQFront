@@ -10,10 +10,26 @@ const spotifyApi = new SpotifyWebApi({
 
 const Track = ({track,search,dj}) => {
 
+  //for dj
   const handleDelete = () =>{
     axios.delete("http://localhost:3001/deleteSong/"+track.id)
   }
 
+  const handleUp = () =>{
+    axios.put("http://localhost:3001/"+track.id+"/moveUp",{
+      position: track.position,
+      queueId: track.queueId
+    })
+  }
+
+  const handleDown = () =>{
+    axios.put("http://localhost:3001/"+track.id+"moveDown",{
+      position: track.position,
+      queueId: track.queueId
+    })
+  }
+
+  //for everybody
   const handleLike = () => {
     const oldLikes = track.likes;
     axios.put("http://localhost:3001/"+track.id+"/like",{
@@ -27,9 +43,10 @@ const Track = ({track,search,dj}) => {
       oldDislikes,
     })
   }
+  //
 
   return (
-    <div className="d-flex m-2 align-items-center">
+    <div className="d-flex m-2 align-items-center" style={{background:"#302A2A"}}>
       <img src={track.albumUrl} style={{ height: "64px", width: "64px" }} alt="" />
       <div className="ml-4 mr-5">
         <div style={{ color: "white" }}>{track.title}</div>
@@ -38,21 +55,25 @@ const Track = ({track,search,dj}) => {
 
       {search ?
        <></>:
-      <div style={{ bottom: "10%" }}>
-        <div style={{position: "absolute", right:"50%"}}>
-          <div style={{color:"green"}}>LIKES: {track.likes}</div>
-          <div style={{color:"red"}}>DISLIKES: {track.dislikes}</div>
+      <><div style={{ marginLeft:"5%" }}>
+          <div >
+            <div style={{ color: "green" }}>LIKES: {track.likes}</div>
+            <div style={{ color: "red" }}>DISLIKES: {track.dislikes}</div>
+          </div>
         </div>
-        <div style={{position: "absolute", right:"26%"}}>
-          <button style={{color:"green"}} onClick={handleLike}>LIKE</button>
-          <button style={{color:"red"}} onClick={handleDislike}>DISLIKE</button>
-        </div> 
-      </div>}
+        <div style={{marginLeft:"10%"}}>
+            <div>
+              <button style={{ background:"transparent", fontSize:"40px",marginRight:"10px", border:"none"}} onClick={handleLike}>👍</button>
+              <button style={{ background:"transparent", fontSize:"40px", marginLeft:"10px", border:"none"}} onClick={handleDislike}>👎</button>
+            </div>
+          </div></>}
 
       {dj ?
-      <div style={{position: "absolute", right:"15%"}}>
+      <div style={{marginLeft:"10%"}}>
+        <button onClick={handleUp}>🔺</button>
+        <button onClick={handleDown}>🔻</button>
         <div>
-        <button style={{color:"red"}} onClick={handleDelete}>X</button>
+        <button style={{ background:"transparent", fontSize:"40px", border:"none"}} onClick={handleDelete}>✖</button>
         </div>
         </div> :
         <></>

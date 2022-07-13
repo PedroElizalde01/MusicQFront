@@ -22,16 +22,15 @@
 }
 
 .Modal {
-    position: absolute;
-    top: 200px;
-    left: 200px;
-    right: 200px;
-    bottom: 200px;
-    padding: 40px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 50px;
     background-color: #302929;
-    border-radius: 12px;
+    border-radius: 40px;
     min-width: 790px;
-    min-height:550;
+    max-width: 810px;
+    margin-top: 100px;
+    height:550;
   }
 
   .Overlay {
@@ -48,5 +47,8 @@
     padding: 2px;
     width: 380px;
     height:380px
-    
+  }
+
+  .label#ratio{
+    color:white;
   }

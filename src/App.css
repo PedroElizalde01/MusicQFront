@@ -1,4 +1,4 @@
-.queueId{
+input#queueId{
     color:white;
     border: none;
     background-color:transparent;
@@ -9,7 +9,7 @@
     text-align:center;
 }
 
-.queueId:focus{
+input#queueId:focus{
     outline: none;
     background-color:transparent;
     border-bottom: 2px solid #1DB954;
@@ -49,4 +49,12 @@ button#main:hover{
 	text-decoration: none;
 	color:white;
 	
+}
+#title{
+    color: white;
+    font-size: 100px;
+}
+
+#description{
+    color: white;
 }

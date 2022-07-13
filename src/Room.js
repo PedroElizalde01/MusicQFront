@@ -9,7 +9,6 @@ import axios from "axios"
 import Modal from 'react-modal';
 import './Room.css'
 import { QRCodeSVG } from 'qrcode.react';
-import { Link } from 'react-router-dom';
 
 const spotifyApi = new SpotifyWebApi({
   clientId: "b3f26e3f562d4f57a30c6b5af6b6bbc4",
@@ -24,7 +23,6 @@ export default function Room( {code} ) {
   const [tracks, setTracks] = useState([])
   const [modal, setModal] = useState(false)
   const link = "http://localhost:3000/join/"+queueId
-  
 
   function openModal(){
     setModal(true)
@@ -34,26 +32,45 @@ export default function Room( {code} ) {
     setModal(false)
   }
 
+  //tracks order by default
   useEffect(() =>{ 
-    axios.get("http://localhost:3001/"+queueId+"/songs") // websocket? -Pedro
+    axios.get("http://localhost:3001/"+queueId+"/songs")
     .then(function(res){
       setInterval(setTracks(res.data),5000)
     })
 })
 
-  useEffect(() => {
+//tracks order by most liked
+const likedTracks = () =>{ 
+  axios.get("http://localhost:3001/"+queueId+"/likedSongs") 
+  .then(function(res){
+    setInterval(setTracks(res.data),5000)
+  })
+}
+
+//tracks order by most disliked
+const dislikedTracks = () =>{ 
+  axios.get("http://localhost:3001/"+queueId+"/dislikedSongs") 
+  .then(function(res){
+    setInterval(setTracks(res.data),5000)
+  })
+}
+
+  useEffect( () => {
     axios.get("http://localhost:3001/"+queueId+"/lastSong")
     .then((res) => {
-      const oldPosition = res.data.position
-      if(oldPosition == NaN) setPosition(0);
-      setPosition(oldPosition+1)
-    },[])
-  })
+      const n = res.data.position
+      console.log("oldPosition: " + n)
+      if(n !== undefined) setPosition(n + 1);
+      console.log("position: " + position)
+      
+    })
+  },[search])
 
 
   function chooseTrack(track) {
-    //add condition if queue is empty -Pedro 
-    console.log(position)
+    //if queue is empty play song -Pedro 
+    if(tracks.length === 0) setPlayingTrack(track)
       axios.post("http://localhost:3001/addSong",{
         uri: track.uri,
         title: track.title,
@@ -67,7 +84,7 @@ export default function Room( {code} ) {
       .then(() => console.log("SONG ENQUEUED SUCCESSFULLY"))
       .catch(() => console.log("ERROR"))
       tracks.push(track)
-    setPlayingTrack(track)
+      console.log(tracks.length)
     setSearch("")
   }
 
@@ -101,7 +118,7 @@ export default function Room( {code} ) {
   return (
     <Container className="d-flex flex-column py-2" style={{ height: "100vh", backgroundColor:"rgba(25, 20, 20, 1)"}}>
       <div>
-        <Link to="/" className="button" style={{borderRadius:"50%", float:"left", textAlign:"center"}}> ◀ </Link>
+        <a href="http://localhost:3000" className="button" style={{borderRadius:"50%", float:"left", textAlign:"center"}}> ◀ </a>
         <button className="button" style={{borderRadius:"50%", float:"right", textAlign:"center"}} onClick={openModal}> i </button>
       </div>
       <Modal
@@ -117,6 +134,17 @@ export default function Room( {code} ) {
             </div>
             <div className="d-flex">
             <QRCodeSVG className="qrCode" value={link}/>
+            <form>
+            <input type="radio" id="html" checked="checked" name="fav_language" value="HTML"/>
+            <label for="html">HTML</label>
+            <br/>
+            <input type="radio" id="css" name="fav_language" value="CSS"/>
+            <label for="css">CSS</label>
+            <br/>
+            <input type="radio" id="javascript" name="fav_language" value="JavaScript"/>
+            <label for="javascript">JavaScript</label>
+            <br/>
+          </form> 
           </div>
         </Modal>
       <Form.Control
@@ -125,6 +153,7 @@ export default function Room( {code} ) {
         value={search}
         onChange={e => setSearch(e.target.value)}
       />
+      <h1 style={{color:"white"}}>Next Up</h1>
       <div className="flex-grow-1 my-2" style={{ overflowY: "auto", textAlign: "left" }}>
         {searchResults.map(track => (
           <TrackSearchResult
@@ -133,7 +162,6 @@ export default function Room( {code} ) {
             chooseTrack={chooseTrack}
           />
         ))}
-        <h1 style={{color:"white"}}>Next Up</h1>
         {searchResults.length === 0 && (
           <div className="text-center" style={{ whiteSpace: "pre" }}>
             <TracksQueue tracks={tracks} search={false} dj={true}/>
@@ -141,7 +169,7 @@ export default function Room( {code} ) {
         )}
       </div>
       <div>
-        <Player accessToken={accessToken} trackUri={tracks.map(track => (track.uri))} />
+        <Player accessToken={accessToken} trackUri={playingTrack?.uri} />
       </div>
     </Container>
   )
