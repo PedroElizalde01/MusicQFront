@@ -1,14 +1,8 @@
-import React from "react"
-import { Container, Row, Col} from "react-bootstrap"
-import SpotifyWebApi from "spotify-web-api-node"
+import React , {useState}from "react"
 import axios from "axios"
 
-
-const spotifyApi = new SpotifyWebApi({
-  clientId: "b3f26e3f562d4f57a30c6b5af6b6bbc4",
-})
-
 const Track = ({track,search,dj}) => {
+  const [canLike, setCanLike] = useState(search)
 
   //for dj
   const handleDelete = () =>{
@@ -43,17 +37,26 @@ const Track = ({track,search,dj}) => {
       oldDislikes,
     })
   }
-  //
+
+  function handleSelect(queueId, position) {
+    const n = position - 1
+    console.log(n)
+    axios.delete("http://localhost:3001/" + queueId,{
+        n,
+    }).then((res) => {
+        console.log(res.data.count + " deleted songs")
+    })        
+}
 
   return (
-    <div className="d-flex m-2 align-items-center" style={{background:"#302A2A"}}>
-      <img src={track.albumUrl} style={{ height: "64px", width: "64px" }} alt="" />
+    <div className="d-flex m-2 align-items-center" style={{background:"#302A2A", borderRadius:"8px"}} >
+      <img src={track.albumUrl} style={{ cursor: "pointer", height: "64px", width: "64px" , margin:"8px"}} alt="" onClick={() => handleSelect(track.queueId, track.position)}/>
       <div className="ml-4 mr-5">
         <div style={{ color: "white" }}>{track.title}</div>
         <div className="text-muted">{track.artist}</div>
       </div>
 
-      {search ?
+      {canLike ?
        <></>:
       <><div style={{ marginLeft:"5%" }}>
           <div >
