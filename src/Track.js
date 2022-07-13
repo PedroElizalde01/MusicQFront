@@ -23,7 +23,7 @@ const Track = ({track,search,dj}) => {
   }
 
   const handleDown = () =>{
-    axios.put("http://localhost:3001/"+track.id+"moveDown",{
+    axios.put("http://localhost:3001/"+track.id+"/moveDown",{
       position: track.position,
       queueId: track.queueId
     })
@@ -69,13 +69,18 @@ const Track = ({track,search,dj}) => {
           </div></>}
 
       {dj ?
+      <>
       <div style={{marginLeft:"10%"}}>
-        <button onClick={handleUp}>🔺</button>
-        <button onClick={handleDown}>🔻</button>
         <div>
-        <button style={{ background:"transparent", fontSize:"40px", border:"none"}} onClick={handleDelete}>✖</button>
+          <button style={{background:"transparent", fontSize:"20px", border:"none"}} onClick={handleUp}>🔺</button>
         </div>
-        </div> :
+        <div>
+          <button style={{background:"transparent", fontSize:"20px", border:"none"}} onClick={handleDown}>🔻</button>
+        </div>
+      </div> 
+        <button style={{ background:"transparent", fontSize:"40px", border:"none"}} onClick={handleDelete}>✖</button>
+        </>
+      :
         <></>
       }
     </div>

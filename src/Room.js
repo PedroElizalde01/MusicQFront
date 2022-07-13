@@ -153,7 +153,7 @@ const dislikedTracks = () =>{
         value={search}
         onChange={e => setSearch(e.target.value)}
       />
-      <h1 style={{color:"white"}}>Next Up</h1>
+      <h1 style={{color:"white", textAlign:"left", marginTop:"10px"}}>Next Up</h1>
       <div className="flex-grow-1 my-2" style={{ overflowY: "auto", textAlign: "left" }}>
         {searchResults.map(track => (
           <TrackSearchResult
