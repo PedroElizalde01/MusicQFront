@@ -3,6 +3,7 @@ import axios from "axios"
 
 const Track = ({track,search,dj}) => {
   const [canLike, setCanLike] = useState(search)
+  const [position, setPosition] = useState(0)
 
   //for dj
   const handleDelete = () =>{
@@ -38,19 +39,19 @@ const Track = ({track,search,dj}) => {
     })
   }
 
-  function handleSelect(queueId, position) {
-    const n = position - 1
-    console.log(n)
-    axios.delete("http://localhost:3001/" + queueId,{
-        n,
-    }).then((res) => {
-        console.log(res.data.count + " deleted songs")
+  function handleSelect(queueId) {
+    setPosition(position - 1)
+    axios.out("http://localhost:3001/"+queueId+"/putFirst",{
+      position: position
+    })
+    .then((res) => {
+        console.log(res.data)
     })        
 }
 
   return (
     <div className="d-flex m-2 align-items-center" style={{background:"#302A2A", borderRadius:"8px"}} >
-      <img src={track.albumUrl} style={{ cursor: "pointer", height: "64px", width: "64px" , margin:"8px"}} alt="" onClick={() => handleSelect(track.queueId, track.position)}/>
+      <img src={track.albumUrl} style={{ cursor: "pointer", height: "64px", width: "64px" , margin:"8px"}} alt="" onClick={() => handleSelect(track.queueId)} />
       <div className="ml-4 mr-5">
         <div style={{ color: "white" }}>{track.title}</div>
         <div className="text-muted">{track.artist}</div>

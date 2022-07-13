@@ -8,7 +8,6 @@ export default function Player({ accessToken, orderBy, queueId}) {
   const [ tracks, setTracks] = useState([])
   const [ currentUri, setUri] = useState(tracks[0]?.uri)
   const [ trackEnd, setTrackEnd] = useState()
-  console.log(orderBy)
 
   useEffect(() => setPlay(true), [currentUri])
 
@@ -34,14 +33,11 @@ export default function Player({ accessToken, orderBy, queueId}) {
 // CHECK IF CURRENT TRACK IS IN PREVIOUS TRACK
 
   function handleNextTrack(previousTrack){
-    console.log(tracks[0].uri)
-    console.log(previousTrack[0].uri)
     if(tracks[0].uri === previousTrack[0].uri){ 
       axios.delete("http://localhost:3001/deleteSong/"+tracks[0].id)
       //axios.put("http://localhost:3001/"+tracks[1].id+"/putFirst")
       setTrackEnd(false)
-      console.log(tracks.shift())
-      console.log(tracks[0].uri)
+      tracks.shift()      
       setUri(tracks[0].uri)
     }
     setTrackEnd(true)

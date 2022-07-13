@@ -130,9 +130,10 @@ const dislikedTracks = () =>{
             </div>
             <div className="d-flex">
             <QRCodeSVG className="qrCode" value={link}/>
-            <button onClick={()=>setMode("default")}>Default</button>
-            <button onClick={()=>setMode("likes")}>Likes</button>
-            <button onClick={()=>setMode("dislikes")}>Dislikes</button>
+            <h1 style={{}}></h1>
+            <button className="button" style={{marginTop:"auto", marginBottom:"auto",padding:"4px",left:"20%"}} onClick={()=>setMode("default")}>Default</button>
+            <button className="button" style={{marginTop:"auto", marginBottom:"auto",padding:"4px",left:"20%"}} onClick={()=>setMode("likes")}>Likes</button>
+            <button className="button" style={{marginTop:"auto", marginBottom:"auto",padding:"4px",left:"20%"}} onClick={()=>setMode("dislikes")}>Dislikes</button>
           </div>
         </Modal>
       <Form.Control
